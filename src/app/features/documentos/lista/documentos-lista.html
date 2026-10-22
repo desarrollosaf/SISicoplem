@@ -1,0 +1,103 @@
+<section class="documentos-page">
+  <header class="documentos-page__header">
+    <div>
+      <h1>Registro de documentos</h1>
+      <p>Programas anuales y catálogo que se publican en la página de consulta.</p>
+    </div>
+    <a class="btn btn--primary" routerLink="crear">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+      </svg>
+      <span>Registrar</span>
+    </a>
+  </header>
+
+  <div class="card">
+    <div class="tabla-header">
+      <div class="tabla-header__titulo">
+        <h2>Documentos registrados</h2>
+        @if (!cargando() && !error()) {
+          <p>
+            {{ lista.filtradas().length }} {{ lista.filtradas().length === 1 ? 'registro' : 'registros' }}
+            @if (filtro() || lista.busqueda()) {
+              <span>de {{ documentos().length }}</span>
+            }
+          </p>
+        }
+      </div>
+    </div>
+
+    @if (cargando()) {
+      <div class="tabla-skeleton">
+        <div class="tabla-skeleton__header"></div>
+        @for (n of [1, 2, 3, 4]; track n) {
+          <div class="tabla-skeleton__row"></div>
+        }
+      </div>
+    } @else if (error()) {
+      <p class="hint hint--error">{{ error() }}</p>
+    } @else if (documentos().length === 0) {
+      <p class="lista-vacia">No hay documentos registrados todavía.</p>
+    } @else {
+      <div class="lista-herramientas">
+        <div class="lista-herramientas__buscador">
+          <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="1.8" />
+            <path d="m20 20-3.2-3.2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" />
+          </svg>
+          <input
+            type="text"
+            placeholder="Buscar por tipo de documento…"
+            aria-label="Buscar"
+            [ngModel]="lista.busqueda()"
+            (ngModelChange)="lista.buscar($event)"
+          />
+          @if (lista.busqueda()) {
+            <button type="button" class="limpiar-busqueda" aria-label="Limpiar búsqueda" (click)="lista.buscar('')">✕</button>
+          }
+        </div>
+        <select class="lista-herramientas__filtro" aria-label="Filtrar por estado" [value]="filtro()" (change)="onFiltroChange($any($event.target).value)">
+          <option value="">Todos</option>
+          <option value="activo">Activos</option>
+          <option value="inactivo">Inactivos</option>
+        </select>
+      </div>
+
+      @if (lista.filtradas().length === 0) {
+        <p class="lista-vacia">Ningún registro coincide con la búsqueda o el filtro.</p>
+      } @else {
+        <ul class="lista-tarjetas">
+          @for (x of lista.visibles(); track x.id) {
+            <li>
+              <app-tarjeta-registro [titulo]="x.tipoNombre" [tono]="x.activo ? 'ok' : 'neutral'" [atenuada]="!x.activo">
+                <span chips class="chip" [class.chip--ok]="x.activo">{{ x.activo ? 'Activo' : 'Inactivo' }}</span>
+                <div acciones>
+                  @if (url(x); as enlace) {
+                    <a class="accion accion--editar" [href]="enlace" target="_blank" rel="noopener noreferrer" title="Ver documento" aria-label="Ver documento">
+                      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M6 3h9l5 5v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+                        <path d="M14 3v5h5" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+                      </svg>
+                    </a>
+                  }
+                  <button type="button" class="accion accion--cancelar" title="Eliminar" aria-label="Eliminar" (click)="eliminar(x)">
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M5 7h14M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2m2 0-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1L6 7h12Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" />
+                    </svg>
+                  </button>
+                </div>
+              </app-tarjeta-registro>
+            </li>
+          }
+        </ul>
+        <app-paginador
+          [total]="lista.filtradas().length"
+          [pagina]="lista.pagina()"
+          [tamano]="lista.tamano()"
+          (paginaChange)="lista.irAPagina($event)"
+          (tamanoChange)="lista.cambiarTamano($event)"
+        />
+      }
+    }
+  </div>
+</section>

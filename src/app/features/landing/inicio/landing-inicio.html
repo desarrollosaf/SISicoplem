@@ -1,0 +1,40 @@
+<section class="pagina">
+  <img class="banner" src="assets/images/banner-sicoplem.png" alt="Sistema de Control de Procedimientos de Adquisiciones, Arrendamientos y Enajenaciones" />
+
+  <div class="card">
+    <h2>Documentos informativos</h2>
+    <div class="enlaces">
+      @for (doc of [
+        { titulo: 'Programa anual de adquisiciones y servicios', ruta: documentos()?.programaAdquisiciones },
+        { titulo: 'Programa anual de arrendamientos, adquisiciones de inmuebles y enajenaciones', ruta: documentos()?.programaArrendamientos },
+        { titulo: 'Catálogo de bienes y servicios', ruta: documentos()?.catalogoBienes }
+      ]; track doc.titulo) {
+        @if (url(doc.ruta); as enlace) {
+          <a class="enlace" [href]="enlace" target="_blank" rel="noopener noreferrer">
+            <span class="enlace__icono"><img src="assets/images/sicoplem.png" alt="" /></span>
+            <strong>{{ doc.titulo }}</strong>
+          </a>
+        } @else {
+          <span class="enlace enlace--sin-documento" title="Documento no disponible">
+            <span class="enlace__icono"><img src="assets/images/sicoplem.png" alt="" /></span>
+            <strong>{{ doc.titulo }}</strong>
+          </span>
+        }
+      }
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Procedimientos</h2>
+    <div class="enlaces">
+      <a class="enlace" routerLink="/adquisiciones">
+        <span class="enlace__icono"><img src="assets/images/sicoplem.png" alt="" /></span>
+        <strong>Procedimientos de adquisiciones y servicios</strong>
+      </a>
+      <a class="enlace" routerLink="/arrendamiento">
+        <span class="enlace__icono"><img src="assets/images/sicoplem.png" alt="" /></span>
+        <strong>Procedimientos de arrendamientos, adquisiciones de inmuebles y enajenaciones</strong>
+      </a>
+    </div>
+  </div>
+</section>

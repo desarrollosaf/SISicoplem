@@ -1,0 +1,56 @@
+<section class="formulario-page">
+  <header class="formulario-page__header">
+    <a class="btn btn--outline" routerLink="/documentos">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span>Regresar</span>
+    </a>
+    <h1>Registrar documento</h1>
+  </header>
+
+  @if (cargandoInicial()) {
+    <div class="skeleton-card">
+      <div class="skeleton-bar skeleton-bar--title"></div>
+      <div class="skeleton-grid">
+        <div class="skeleton-bar"></div>
+        <div class="skeleton-bar"></div>
+      </div>
+    </div>
+  } @else {
+    <div class="card">
+      <h2><span class="card__numero">1</span>Datos del documento</h2>
+      <div class="grid grid--2">
+        <div class="campo">
+          <label for="tipo">Tipo <span class="req">*</span></label>
+          <select id="tipo" [class.is-invalid]="invalidTipo()" [ngModel]="tipo() === null ? '' : '' + tipo()" (ngModelChange)="onTipoChange($event)">
+            <option value="">Selecciona una opción</option>
+            @for (t of tipos(); track t.id) {
+              <option [value]="'' + t.id">{{ t.nombre }}</option>
+            }
+          </select>
+        </div>
+        <div class="campo">
+          <label>Documento <span class="req">*</span></label>
+          <app-file-upload variant="list" [multiple]="false" accept="application/pdf" [files]="archivos()" (filesChange)="archivos.set($event.slice(-1))" />
+          @if (invalidArchivo()) {
+            <p class="hint hint--error">Selecciona el documento.</p>
+          }
+        </div>
+      </div>
+      <p class="hint">Al registrar un documento nuevo del mismo tipo, el anterior deja de estar activo en la página de consulta.</p>
+    </div>
+
+    <div class="acciones">
+      <p class="acciones__hint"><span class="req">*</span> Campos obligatorios</p>
+      <button type="button" class="btn btn--primary" [disabled]="enviando()" (click)="guardar()">
+        @if (enviando()) {
+          <span class="spinner" aria-hidden="true"></span>
+          <span>Guardando…</span>
+        } @else {
+          <span>Guardar documento</span>
+        }
+      </button>
+    </div>
+  }
+</section>

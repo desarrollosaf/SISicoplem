@@ -1,0 +1,75 @@
+// Estilos comunes de las páginas públicas (se incluye con @use desde cada pantalla).
+
+.pagina {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: page-in 0.3s ease-out;
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.5rem;
+      color: var(--brand-ink);
+    }
+
+    p {
+      margin: 0;
+      color: var(--brand-muted);
+      font-size: 0.92rem;
+    }
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.hint {
+  margin: 0;
+  color: var(--brand-muted);
+  font-size: 0.88rem;
+
+  &--error {
+    color: var(--brand-danger);
+  }
+}
+
+.lista-vacia {
+  margin: 0;
+  padding: 2rem 1rem;
+  border: 1.5px dashed var(--brand-border);
+  border-radius: 14px;
+  text-align: center;
+  color: var(--brand-muted);
+  font-size: 0.88rem;
+}
+
+.skeleton-bar {
+  height: 64px;
+  margin-bottom: 0.75rem;
+  border-radius: 14px;
+  background: linear-gradient(90deg, var(--brand-bg) 25%, #e9ece2 37%, var(--brand-bg) 63%);
+  background-size: 400% 100%;
+  animation: skeleton-shimmer 1.4s ease infinite;
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 100% 50%; }
+  100% { background-position: 0 50%; }
+}
+
+@keyframes page-in {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}

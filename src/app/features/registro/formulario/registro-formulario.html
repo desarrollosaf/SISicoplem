@@ -1,0 +1,202 @@
+<section class="formulario-page">
+  <header class="formulario-page__header">
+    <a class="btn btn--outline" routerLink="/registro">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span>Regresar</span>
+    </a>
+    <h1>{{ modoEdicion ? 'Editar procedimiento' : 'Registrar procedimiento' }}</h1>
+  </header>
+
+  @if (cargandoInicial()) {
+    <div class="skeleton-card">
+      <div class="skeleton-bar skeleton-bar--title"></div>
+      <div class="skeleton-grid">
+        <div class="skeleton-bar"></div>
+        <div class="skeleton-bar"></div>
+        <div class="skeleton-bar"></div>
+      </div>
+    </div>
+  } @else {
+    <div class="card">
+      <h2><span class="card__numero">1</span>Datos generales</h2>
+      <div class="grid grid--2">
+        <div class="campo">
+          <label for="tipo">Tipo <span class="req">*</span></label>
+          <select
+            id="tipo"
+            [class.is-invalid]="invalidTipo()"
+            [disabled]="modoEdicion"
+            [ngModel]="tipo() === null ? '' : '' + tipo()"
+            (ngModelChange)="onTipoChange($event)"
+          >
+            <option value="">Selecciona una opción</option>
+            @for (t of tipos(); track t.id) {
+              <option [value]="'' + t.id">{{ t.nombre }}</option>
+            }
+          </select>
+        </div>
+      </div>
+
+      <div class="campo">
+        <label for="nombre">Descripción</label>
+        <input
+          id="nombre"
+          type="text"
+          placeholder="Ejem. 4/2018/LX-LEM CON TESTIGO SOCIAL PARA CONTRATACIÓN DE SEGURO COLECTIVO DE VIDA PARA EL PERSONAL"
+          [ngModel]="nombre()"
+          (ngModelChange)="nombre.set($event)"
+        />
+      </div>
+
+      @if (mostrarDocumento()) {
+        <div class="campo">
+          <label>{{ etiquetaDocumento() }}</label>
+          <app-file-upload
+            variant="list"
+            [multiple]="false"
+            [files]="archivosDe('documento')"
+            (filesChange)="setArchivos('documento', $event, true)"
+          />
+          @if (rutaExistente('documento')) {
+            <button type="button" class="documento-existente" (click)="verDocumento(etiquetaDocumento(), rutaExistente('documento'))">
+              <span>Ver {{ etiquetaDocumento().toLowerCase() }}</span>
+              <img src="assets/images/pdf.png" alt="" />
+            </button>
+          }
+        </div>
+      }
+    </div>
+
+    @if (fases().length) {
+      <div class="card">
+        <h2><span class="card__numero">2</span>Fases del procedimiento</h2>
+
+        @for (fase of fases(); track fase.sufijo) {
+          <div class="fase">
+            <h3>{{ fase.titulo }}</h3>
+            <div class="grid--fase" [class.grid--fase-corta]="!fase.conLugar">
+              <div class="campo">
+                <label>Día</label>
+                <input
+                  type="text"
+                  [placeholder]="'Ejem. ' + fase.ejemploDia"
+                  [ngModel]="dato('dia_' + fase.sufijo)"
+                  (ngModelChange)="setDato('dia_' + fase.sufijo, $event)"
+                />
+              </div>
+              <div class="campo">
+                <label>Hora</label>
+                <input
+                  type="text"
+                  [placeholder]="'Ejem. ' + fase.ejemploHora"
+                  [ngModel]="dato('hora_' + fase.sufijo)"
+                  (ngModelChange)="setDato('hora_' + fase.sufijo, $event)"
+                />
+              </div>
+              @if (fase.conLugar) {
+                <div class="campo campo--lugar">
+                  <label>Lugar</label>
+                  <textarea
+                    [placeholder]="'Ejem. ' + fase.ejemploLugar"
+                    [ngModel]="dato('lugar_' + fase.sufijo)"
+                    (ngModelChange)="setDato('lugar_' + fase.sufijo, $event)"
+                  ></textarea>
+                </div>
+              }
+              <div class="campo">
+                <label>Estado</label>
+                <div class="estados" role="radiogroup" [attr.aria-label]="'Estado: ' + fase.titulo">
+                  @for (e of estados; track e.valor) {
+                    <label>
+                      <input
+                        type="radio"
+                        [name]="'radio_' + fase.sufijo"
+                        [value]="e.valor"
+                        [checked]="dato('radio_' + fase.sufijo) === e.valor"
+                        (change)="setDato('radio_' + fase.sufijo, e.valor)"
+                      />
+                      {{ e.etiqueta }}
+                    </label>
+                  }
+                  @if (dato('radio_' + fase.sufijo)) {
+                    <button type="button" class="limpiar-estado" (click)="setDato('radio_' + fase.sufijo, '')">Quitar selección</button>
+                  }
+                </div>
+              </div>
+              <div class="campo">
+                <label>Documento</label>
+                <app-file-upload
+                  variant="list"
+                  [multiple]="false"
+                  [files]="archivosDe(fase.archivo)"
+                  (filesChange)="setArchivos(fase.archivo, $event, true)"
+                />
+                @if (rutaExistente(fase.archivo)) {
+                  <button type="button" class="documento-existente" (click)="verDocumento(fase.titulo, rutaExistente(fase.archivo))">
+                    <span>Ver documento</span>
+                    <img src="assets/images/pdf.png" alt="" />
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+        }
+      </div>
+    }
+
+    @if (mostrarContrato()) {
+      <div class="card">
+        <h2><span class="card__numero">{{ fases().length ? 3 : 2 }}</span>Contrato</h2>
+        <div class="campo">
+          <label>Contrato(s)</label>
+          <app-file-upload
+            variant="list"
+            [multiple]="true"
+            [files]="archivosDe('contrato')"
+            (filesChange)="setArchivos('contrato', $event, false)"
+          />
+          <p class="hint">Si seleccionas varios archivos se guardan comprimidos en un solo .zip.</p>
+          @if (rutaExistente('path_contrato')) {
+            <button type="button" class="documento-existente" (click)="verDocumento('Contrato', rutaExistente('path_contrato'))">
+              <span>Ver contrato</span>
+              <img src="assets/images/pdf.png" alt="" />
+            </button>
+          }
+        </div>
+      </div>
+    }
+
+    <div class="acciones">
+      <p class="acciones__hint"><span class="req">*</span> Campos obligatorios</p>
+      <button type="button" class="btn btn--primary" [disabled]="enviando()" (click)="guardar()">
+        @if (enviando()) {
+          <span class="spinner" aria-hidden="true"></span>
+          <span>Guardando…</span>
+        } @else {
+          <span>{{ modoEdicion ? 'Guardar cambios' : 'Guardar registro' }}</span>
+        }
+      </button>
+    </div>
+  }
+</section>
+
+@if (visor(); as v) {
+  <div class="visor" role="dialog" aria-modal="true" [attr.aria-label]="v.titulo" (click)="cerrarVisor()" (keydown.escape)="cerrarVisor()" tabindex="-1">
+    <div class="visor__caja" (click)="$event.stopPropagation()" (keydown)="$event.stopPropagation()" tabindex="-1">
+      <div class="visor__cabecera">
+        <h2>{{ v.titulo }}</h2>
+        <button type="button" class="visor__cerrar" aria-label="Cerrar" (click)="cerrarVisor()">✕</button>
+      </div>
+      @if (v.zip) {
+        <div class="visor__zip">
+          <p>Este contrato es un archivo comprimido (.zip) con varios documentos.</p>
+          <a class="btn btn--primary" [href]="v.url" download>Descargar contrato</a>
+        </div>
+      } @else {
+        <iframe [src]="v.seguro" [title]="v.titulo"></iframe>
+      }
+    </div>
+  </div>
+}

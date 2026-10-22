@@ -1,0 +1,96 @@
+<section class="pagina">
+  <header class="pagina__header">
+    <div>
+      <h1>Detalle del procedimiento</h1>
+    </div>
+    <button type="button" class="btn btn--outline" (click)="volver()">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span>Regresar</span>
+    </button>
+  </header>
+
+  @if (cargando()) {
+    <div class="card">
+      @for (n of [1, 2, 3]; track n) {
+        <div class="skeleton-bar"></div>
+      }
+    </div>
+  } @else if (error()) {
+    <p class="hint hint--error">{{ error() }}</p>
+  } @else if (procedimiento(); as p) {
+    <div class="card">
+      <dl class="resumen">
+        <div>
+          <dt>Tipo</dt>
+          <dd>{{ p.tipoNombre }}</dd>
+        </div>
+        <div>
+          <dt>Descripción</dt>
+          <dd>{{ p.nombre }}</dd>
+        </div>
+      </dl>
+
+      <div class="documentos">
+        @if (url(p.documento); as enlace) {
+          <a class="documento" [href]="enlace" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/pdf.png" alt="" />
+            <span>{{ etiquetaDocumento() }}</span>
+          </a>
+        }
+        @if (filas().length === 0 && url(p.path_contrato); as enlace) {
+          <a class="documento" [href]="enlace" target="_blank" rel="noopener noreferrer">
+            <img src="assets/images/pdf.png" alt="" />
+            <span>Contrato</span>
+          </a>
+        }
+      </div>
+
+      @if (filas().length) {
+        <div class="tabla-responsive">
+          <table class="tabla">
+            <thead>
+              <tr>
+                <th>Fase</th>
+                <th>Fecha</th>
+                <th>Hora</th>
+                <th>Lugar</th>
+                <th>Estado</th>
+                <th>Documento</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (f of filas(); track f.fase) {
+                <tr>
+                  <td>{{ f.fase }}</td>
+                  <td>{{ f.dia }}</td>
+                  <td>{{ f.hora }}</td>
+                  <td>{{ f.lugar }}</td>
+                  <td>{{ f.estado }}</td>
+                  <td class="centro">
+                    @if (url(f.documento); as enlace) {
+                      <a [href]="enlace" target="_blank" rel="noopener noreferrer" aria-label="Ver documento">
+                        <img src="assets/images/pdf.png" alt="" width="25" />
+                      </a>
+                    }
+                  </td>
+                </tr>
+              }
+              @if (url(p.path_contrato); as enlace) {
+                <tr>
+                  <td colspan="5">Contrato:</td>
+                  <td class="centro">
+                    <a [href]="enlace" target="_blank" rel="noopener noreferrer" aria-label="Ver contrato">
+                      <img src="assets/images/pdf.png" alt="" width="25" />
+                    </a>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
+    </div>
+  }
+</section>

@@ -1,0 +1,63 @@
+@use '../../../shared/ag-grid/tabla-header';
+@use '../../../shared/ag-grid/tabla-skeleton';
+@use '../../../shared/tarjetas/tarjetas';
+
+:host {
+  display: block;
+}
+
+.documentos-page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  animation: page-in 0.3s ease-out;
+
+  &__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+
+    h1 {
+      margin: 0 0 0.35rem;
+      font-size: 1.5rem;
+      color: var(--brand-ink);
+    }
+
+    p {
+      margin: 0;
+      color: var(--brand-muted);
+      font-size: 0.92rem;
+    }
+  }
+}
+
+.card {
+  background: #fff;
+  border: 1px solid var(--brand-border);
+  border-radius: 16px;
+  padding: 1.5rem;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.hint {
+  margin: 0;
+  color: var(--brand-muted);
+  font-size: 0.88rem;
+
+  &--error {
+    color: var(--brand-danger);
+  }
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

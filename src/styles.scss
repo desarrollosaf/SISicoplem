@@ -1,0 +1,96 @@
+/* You can add global styles to this file, and also import other style files */
+
+:root {
+  --brand-primary: rgb(150, 0, 72);
+  --brand-primary-dark: #5a002b;
+  --brand-primary-soft: rgba(150, 0, 72, 0.08);
+  --brand-ink: #4b4b4d;
+  --brand-muted: #767679;
+  --brand-border: #e4e2e3;
+  --brand-bg: #f3f4f6;
+  --brand-danger: #b3261e;
+  --brand-danger-bg: #fdecea;
+  --brand-green: #79b037;
+  --brand-lime: #d6ed70;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* ag-grid renders its own DOM outside Angular's style encapsulation,
+   so header alignment has to be set globally rather than per-component. */
+ag-grid-angular .ag-header-cell-label {
+  justify-content: center;
+}
+
+ag-grid-angular .ag-header-cell-label .ag-header-cell-text {
+  text-overflow: clip;
+  white-space: normal;
+  line-height: 1.25;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', system-ui, -apple-system, Roboto, sans-serif;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1.4rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.12s, box-shadow 0.12s, border-color 0.15s, opacity 0.12s;
+
+  svg { width: 19px; height: 19px; flex-shrink: 0; }
+
+  &--primary {
+    background: linear-gradient(135deg, var(--brand-primary), var(--brand-primary-dark));
+    color: #fff;
+    box-shadow: 0 10px 22px var(--brand-primary-soft);
+
+    &:hover:not(:disabled) { transform: translateY(-1px); box-shadow: 0 14px 28px rgba(150, 0, 72, 0.24); }
+  }
+
+  &--outline {
+    background: #fff;
+    color: var(--brand-ink);
+    border: 1.5px solid var(--brand-border);
+
+    &:hover:not(:disabled) { border-color: var(--brand-primary); color: var(--brand-primary); }
+  }
+
+  &:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+}
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spinner-spin 0.7s linear infinite;
+}
+
+@keyframes spinner-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

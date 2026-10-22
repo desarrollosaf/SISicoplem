@@ -1,0 +1,57 @@
+<section class="pagina">
+  <header class="pagina__header">
+    <div>
+      <h1>{{ titulo }}</h1>
+      <p>{{ descripcion }}</p>
+    </div>
+    <a class="btn btn--outline" routerLink="/licitaciones">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M15 6l-6 6 6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+      </svg>
+      <span>Inicio</span>
+    </a>
+  </header>
+
+  @if (cargando()) {
+    <div class="card">
+      @for (n of [1, 2, 3, 4]; track n) {
+        <div class="skeleton-bar"></div>
+      }
+    </div>
+  } @else if (error()) {
+    <p class="hint hint--error">{{ error() }}</p>
+  } @else if (anios().length === 0) {
+    <p class="lista-vacia">No hay procedimientos publicados todavía.</p>
+  } @else {
+    <div class="contenido">
+      <nav class="anios" aria-label="Año">
+        @for (a of anios(); track a.anio) {
+          <button type="button" class="anios__boton" [class.anios__boton--activo]="a.anio === anioActivo()" (click)="elegirAnio(a.anio)">
+            {{ a.anio }}
+          </button>
+        }
+      </nav>
+
+      @if (seleccionado(); as sel) {
+        <div class="card">
+          <h2>{{ sel.anio }}</h2>
+          @for (seccion of sel.secciones; track seccion.titulo) {
+            <h3>{{ seccion.titulo }}</h3>
+            <ul class="procedimientos">
+              @for (item of seccion.items; track item.id) {
+                <li>
+                  <a class="procedimiento" [routerLink]="['/licitaciones', item.id]">
+                    <span>{{ item.nombre }}</span>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                    </svg>
+                  </a>
+                </li>
+              }
+            </ul>
+          }
+        </div>
+      }
+    </div>
+  }
+</section>

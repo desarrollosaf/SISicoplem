@@ -1,0 +1,29 @@
+# Producción: la base de datos es la existente (DB_HOST en backend/.env), no se levanta aquí.
+services:
+  frontend:
+    build:
+      context: .
+      dockerfile: DockerFile
+      args:
+        BASE_HREF: /sicoplem/
+    container_name: sisicoplem-frontend
+    ports:
+      - "8094:80"
+    restart: always
+    depends_on:
+      - backend
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: DockerFile
+    container_name: sisicoplem-backend
+    ports:
+      - "3035:3060"
+    env_file:
+      - ./backend/.env
+    environment:
+      TZ: America/Mexico_City
+    volumes:
+      - ./backend/uploads:/app/uploads
+    restart: always

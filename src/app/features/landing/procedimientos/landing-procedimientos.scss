@@ -1,0 +1,112 @@
+@use '../pagina';
+
+:host {
+  display: block;
+}
+
+.contenido {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.anios {
+  position: sticky;
+  top: 90px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.5rem;
+  border: 1px solid var(--brand-border);
+  border-radius: 16px;
+  background: #fff;
+
+  &__boton {
+    padding: 0.6rem 0.9rem;
+    border: none;
+    border-radius: 10px;
+    background: none;
+    color: var(--brand-muted);
+    font-size: 0.9rem;
+    font-weight: 700;
+    text-align: left;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+
+    &:hover { background: var(--brand-primary-soft); color: var(--brand-primary); }
+
+    &--activo {
+      background: var(--brand-primary-soft);
+      color: var(--brand-primary);
+    }
+  }
+}
+
+h2 {
+  margin: 0 0 1rem;
+  font-size: 1.6rem;
+  color: var(--brand-ink);
+}
+
+h3 {
+  margin: 1.5rem 0 0.75rem;
+  font-size: 1rem;
+  color: var(--brand-primary);
+
+  &:first-of-type { margin-top: 0; }
+}
+
+.procedimientos {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.procedimiento {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid var(--brand-border);
+  border-radius: 14px;
+  background: #fff;
+  color: var(--brand-ink);
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.4;
+  text-decoration: none;
+  transition: border-color 0.18s, box-shadow 0.18s, transform 0.18s;
+
+  svg {
+    width: 18px;
+    height: 18px;
+    flex-shrink: 0;
+    color: var(--brand-muted);
+  }
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--brand-primary);
+    box-shadow: 0 8px 22px rgba(0, 0, 0, 0.07);
+    transform: translateY(-1px);
+
+    svg { color: var(--brand-primary); }
+  }
+}
+
+@media (max-width: 800px) {
+  .contenido {
+    grid-template-columns: 1fr;
+  }
+
+  .anios {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}

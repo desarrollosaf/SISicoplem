@@ -1,0 +1,63 @@
+<div class="shell">
+  <nav class="navbar navbar-expand-lg topbar sticky-top">
+    <div class="container-fluid px-3 px-lg-4">
+      <a class="navbar-brand topbar__brand" routerLink="/licitaciones">
+        <img class="topbar__logo" src="assets/congreso-edomex-logo.png" alt="Congreso del Estado de México" />
+        <span class="topbar__divider d-none d-sm-block" aria-hidden="true"></span>
+        <span class="topbar__title">SICOPLEM<br /><small>Secretaría de Administración y Finanzas</small></span>
+      </a>
+
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#landingNav"
+        aria-controls="landingNav"
+        aria-expanded="false"
+        aria-label="Abrir menú"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="landingNav">
+        <ul class="navbar-nav topbar__nav ms-lg-auto my-3 my-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/licitaciones" [routerLinkActiveOptions]="{ exact: true }" routerLinkActive="active" (click)="cerrarMenuMovil()">Inicio</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/adquisiciones" routerLinkActive="active" (click)="cerrarMenuMovil()">Adquisiciones</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/arrendamiento" routerLinkActive="active" (click)="cerrarMenuMovil()">Arrendamientos y enajenaciones</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/login" (click)="cerrarMenuMovil()">Iniciar sesión</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content">
+    <router-outlet />
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <div class="site-footer__info text-center text-lg-start">
+        <p class="site-footer__copy mb-1">Poder Legislativo del Estado de México</p>
+        <p class="mb-0">Plaza Hidalgo s/n, Col. Centro</p>
+        <p class="mb-0">Toluca de Lerdo, Estado de México</p>
+        <p class="mb-0">Conmutador (722) 279-6400</p>
+      </div>
+
+      <img class="site-footer__logo" src="assets/logo-animado.gif" alt="Congreso del Estado de México" loading="lazy" />
+
+      <nav class="site-footer__enlaces text-center text-lg-end" aria-label="Enlaces de interés">
+        <a href="http://legislacion.legislativoedomex.gob.mx/avisosdeprivacidad" target="_blank" rel="noopener noreferrer">Aviso de privacidad</a>
+        <a href="http://legislacion.legislativoedomex.gob.mx/transparencia" target="_blank" rel="noopener noreferrer">Transparencia</a>
+        <a href="http://legislacion.legislativoedomex.gob.mx/dependencias" target="_blank" rel="noopener noreferrer">Dependencias</a>
+      </nav>
+    </div>
+  </footer>
+</div>
