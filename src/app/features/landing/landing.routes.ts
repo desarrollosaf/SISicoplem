@@ -5,6 +5,7 @@ export const LANDING_ROUTES: Routes = [
     path: '',
     loadComponent: () => import('./layout/landing-layout').then((m) => m.LandingLayout),
     children: [
+      { path: '', pathMatch: 'full', redirectTo: 'licitaciones' },
       {
         path: 'licitaciones',
         loadComponent: () => import('./inicio/landing-inicio').then((m) => m.LandingInicio),
